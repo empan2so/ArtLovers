@@ -39,6 +39,10 @@ class LocalDataSourceImpl @Inject constructor(
         return artworkDao.batchGetArtwork(ids)
     }
 
+    override suspend fun getLovedIds(): List<Long>? {
+        return artworkDao.listArtworkIds()
+    }
+
     override suspend fun insertArtwork(artwork: Artwork) = withContext(ioDispatcher){
         return@withContext artworkDao.addArtwork(artwork)
     }

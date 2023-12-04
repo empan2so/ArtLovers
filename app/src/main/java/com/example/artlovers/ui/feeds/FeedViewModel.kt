@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.artlovers.data.model.Artwork
 import com.example.artlovers.data.repository.ArtworkRepository
@@ -46,14 +47,18 @@ class FeedViewModel @Inject constructor(
 
     fun loadFromNetwork() {
         viewModelScope.launch(ioDispatcher) {
-            updateHomeModel(repository.getListArtworkRemote(1, 50))
+            repository.getListArtworkRemote(1, 50).collect {
+                updateHomeModel(it)
+            }
         }
     }
 
     fun loadSearchResults(search: String) {
         viewModelScope.launch(ioDispatcher) {
             if (search.isNotBlank()) {
-                updateHomeModel(repository.getSearchResultsRemote(search))
+                repository.getSearchResultsRemote(search).collect {
+                    updateHomeModel(it)
+                }
             } else {
                 loadFromNetwork()
             }

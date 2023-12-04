@@ -64,7 +64,7 @@ class ArtFeedAdapter(
     //TODO instead of replacing entire list, update only changed items
     fun updateListItems(listItems: List<Artwork>) {
         if (artworkList != listItems) {
-            Log.i("ArtFeedAdapter", "Adding ${listItems.size} items")
+//            Log.i("ArtFeedAdapter", "Adding ${listItems.size} items")
             val previousSize = itemCount
             artworkList.clear()
             notifyItemRangeRemoved(0, previousSize)

@@ -23,6 +23,9 @@ interface ArtworkDao {
     @Query("SELECT * FROM artwork WHERE id IN (:ids) ")
     fun batchGetArtwork(ids: List<Long>): List<Artwork>?
 
+    @Query("SELECT id FROM artwork")
+    fun listArtworkIds(): List<Long>?
+
     @Query("SELECT * FROM artwork WHERE title LIKE :search")
     fun listArtworkForSearch(search: String): List<Artwork>?
 

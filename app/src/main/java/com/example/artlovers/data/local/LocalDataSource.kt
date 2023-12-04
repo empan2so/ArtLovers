@@ -15,6 +15,7 @@ interface LocalDataSource {
 
     suspend fun getArtwork(id: Long): LiveData<Artwork?>
     suspend fun getSubsetArtwork(ids: List<Long>): List<Artwork>?
+    suspend fun getLovedIds(): List<Long>?
 
     suspend fun insertListArtwork(artwork: List<Artwork>)
     suspend fun insertArtwork(artwork: Artwork)

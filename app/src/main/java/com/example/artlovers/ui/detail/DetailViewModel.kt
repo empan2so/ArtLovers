@@ -9,6 +9,7 @@ import com.example.artlovers.data.model.Artwork
 import com.example.artlovers.data.repository.ArtworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,17 +26,17 @@ class DetailViewModel @Inject constructor(
     val artwork: LiveData<Artwork?>
         get() = _artwork
 
-    fun updateModel(artwork: Artwork) {
+    fun updateModel(artwork: Artwork?) {
         Log.i("DetailViewModel", "Updating model ${artwork}")
         _artwork.postValue(artwork)
     }
 
     fun updateDetailFromNetwork(id: Long, isLoved: Boolean) {
         viewModelScope.launch(ioDispatcher) {
-            repository.getArtworkFromRemote(id.toString())?.let {
-                val artwork = it.copy(isLoved = isLoved)
+            repository.getArtworkFromRemote(id.toString()).collect {
+                val artwork = it?.copy(isLoved = isLoved)
                 updateModel(artwork)
-                if (artwork.isLoved == true) {
+                if (artwork?.isLoved == true) {
                     repository.updateIsLoved(artwork)
                 }
             }
