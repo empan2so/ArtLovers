@@ -4,7 +4,7 @@ Android application that displays lists of artworks from the [Art Institute of C
 
 Swipe between two feeds - Home (default and searchable) and Loved and click on feed items to view more detail on the detail screen including an image of the piece.
 
-![](screenshots.jpg)
+![](screenshots.png)
 
 ## Architecture
 - Single-activity architecture using ViewPager2 and NavController to navigate between Fragments.
