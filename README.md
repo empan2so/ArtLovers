@@ -2,18 +2,18 @@
 
 Android application that displays lists of artworks from the [Art Institute of Chicago REST API](https://api.artic.edu/docs/) via Retrofit and saves "loved" artwork data to a local database using Room.
 
-Swipe between two feeds - Home (default and searchable) and Loved and click on feed items to view more detail on the detail screen including an image of the piece.
+Swipe between two feeds - Home (searchable) and Loved and click on feed items to view more info on the detail screen including an image of the piece.
 
 ![](screenshots.png)
 
 ## Architecture
 - Single-activity architecture using ViewPager2 and NavController to navigate between Fragments.
 - MVVM pattern with Fragments that observe LiveData from ViewModels.
-- Repository provides access to local and remote data sources.
-- The LocalDataSource emits LiveData directly from the Dao while the RemoteDataSource emits a Flow of the API response, both on I/O threads.
-- Dependency injection using Dagger-Hilt
+- The ArtworkRepository provides access to local and remote data sources.
+- The LocalDataSource emits LiveData directly from ArtworkDao while the RemoteDataSource emits a Flow of the API response from ArtService, both on I/O threads.
+- Dependency injection using Dagger-Hilt.
 
-Data flow chart:
+### Data flow chart:
 ![](dataflow.jpg)
 
 ## Libraries used:
