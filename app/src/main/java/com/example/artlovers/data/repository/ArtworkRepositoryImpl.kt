@@ -2,11 +2,9 @@ package com.example.artlovers.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import com.example.artlovers.data.local.LocalDataSource
 import com.example.artlovers.data.model.Artwork
 import com.example.artlovers.data.remote.RemoteDataSource
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -16,7 +14,6 @@ import javax.inject.Singleton
 class ArtworkRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
-    private val ioDispatcher: CoroutineDispatcher,
 ) : ArtworkRepository {
 
     override val lovedArtwork: LiveData<List<Artwork>?> =
@@ -31,8 +28,8 @@ class ArtworkRepositoryImpl @Inject constructor(
         if (artwork.isLoved == false) { localDataSource.deleteArtwork(artwork) }
     }
 
-    override suspend fun getSearchResultsLocal(search: String): LiveData<List<Artwork>> {
-        return localDataSource.listSearchResults(search).asLiveData(ioDispatcher)
+    override suspend fun getSearchResultsLocal(search: String): LiveData<List<Artwork>?> {
+        return localDataSource.listSearchResults(search)
     }
 
     override suspend fun getArtworkFromRemote(id: String): Flow<Artwork?> {

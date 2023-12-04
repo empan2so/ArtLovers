@@ -14,20 +14,14 @@ interface ArtworkDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addArtwork(vararg artwork: Artwork)
 
-    @Query("SELECT * FROM artwork ORDER BY title DESC")
+    @Query("SELECT * FROM artwork ORDER BY title ASC")
     fun listArtwork(): LiveData<List<Artwork>?>
-
-//    @Query("SELECT * FROM artwork WHERE isLoved ORDER BY title DESC")
-//    fun listLovedArtwork(): LiveData<List<Artwork>?>
-
-    @Query("SELECT * FROM artwork WHERE id IN (:ids) ")
-    fun batchGetArtwork(ids: List<Long>): List<Artwork>?
 
     @Query("SELECT id FROM artwork")
     fun listArtworkIds(): List<Long>?
 
     @Query("SELECT * FROM artwork WHERE title LIKE :search")
-    fun listArtworkForSearch(search: String): List<Artwork>?
+    fun listArtworkForSearch(search: String): LiveData<List<Artwork>?>
 
     @Query("SELECT * FROM artwork WHERE id=:id LIMIT 1")
     fun getArtworkById(id: Long): LiveData<Artwork?>

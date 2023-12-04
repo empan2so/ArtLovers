@@ -19,7 +19,7 @@
             android:layout_margin="@dimen/text_margin"
             android:ellipsize="end"
             android:inputType="textMultiLine"
-            android:maxLines="4"
+            android:maxLines="10"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/detail_loved"
             app:layout_constraintTop_toTopOf="parent" />

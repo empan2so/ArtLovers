@@ -13,7 +13,7 @@ interface ArtworkRepository {
     val lovedArtwork: LiveData<List<Artwork>?>
     suspend fun getArtworkFromDB(id: Long): LiveData<Artwork?>
     suspend fun updateIsLoved(artwork: Artwork)
-    suspend fun getSearchResultsLocal(search: String): LiveData<List<Artwork>>
+    suspend fun getSearchResultsLocal(search: String): LiveData<List<Artwork>?>
 
     // Remote
     suspend fun getArtworkFromRemote(id: String): Flow<Artwork?>
