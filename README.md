@@ -1,6 +1,8 @@
 # ArtLovers 🎨
 
-Android application that displays lists of artworks from the [Art Institute of Chicago REST API](https://api.artic.edu/docs/) via Retrofit and saves "loved" artwork to a local database using Room.
+Android application that displays lists of artworks from the [Art Institute of Chicago REST API](https://api.artic.edu/docs/) via Retrofit and saves "loved" artwork data to a local database using Room.
+
+Swipe between two feeds - Home (default and searchable) and Loved and click on feed items to view more detail on the detail screen including an image of the piece.
 
 ## Architecture
 - Single-activity architecture using ViewPager2 and NavController to navigate between Fragments.

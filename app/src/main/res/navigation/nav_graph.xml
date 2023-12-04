@@ -10,9 +10,6 @@
         android:name="com.example.artlovers.ui.detail.DetailFragment"
         android:label="DetailFragment"
         tools:layout="@layout/detail_fragment">
-<!--        <argument-->
-<!--            android:name="artwork_id"-->
-<!--            app:argType="Long" />-->
     </fragment>
 
     <fragment
@@ -24,10 +21,6 @@
             android:id="@+id/action_mainFragment_to_detailFragment"
             app:destination="@id/detailFragment"
             app:enterAnim="@android:anim/slide_in_left" />
-<!--        <argument-->
-<!--            android:name="myArg"-->
-<!--            app:argType="long"-->
-<!--            android:defaultValue="@null"/>-->
     </fragment>
 
 
