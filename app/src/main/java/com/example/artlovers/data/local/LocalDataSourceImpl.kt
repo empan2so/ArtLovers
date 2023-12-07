@@ -2,15 +2,12 @@ package com.example.artlovers.data.local
 
 import androidx.lifecycle.LiveData
 import com.example.artlovers.data.model.Artwork
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocalDataSourceImpl @Inject constructor(
-    private val artworkDao : ArtworkDao,
-    private val ioDispatcher: CoroutineDispatcher,
+    private val artworkDao : ArtworkDao
 ): LocalDataSource {
 
     override val lovedArtwork: LiveData<List<Artwork>?> = artworkDao.listArtwork()
@@ -27,15 +24,15 @@ class LocalDataSourceImpl @Inject constructor(
         return artworkDao.listArtworkIds()
     }
 
-    override suspend fun insertArtwork(artwork: Artwork) = withContext(ioDispatcher){
-        return@withContext artworkDao.addArtwork(artwork)
+    override suspend fun insertArtwork(artwork: Artwork) {
+        return artworkDao.addArtwork(artwork)
     }
 
-    override suspend fun insertListArtwork(artwork: List<Artwork>) = withContext(ioDispatcher){
-        return@withContext artwork.forEach { artworkDao.addArtwork(it) }
+    override suspend fun insertListArtworks(artworks: List<Artwork>) {
+        return artworkDao.insertList(artworks)
     }
 
-    override suspend fun deleteArtwork(artwork: Artwork) = withContext(ioDispatcher) {
-        return@withContext artworkDao.delete(artwork)
+    override suspend fun deleteArtwork(artwork: Artwork) {
+        return artworkDao.delete(artwork)
     }
 }

@@ -6,26 +6,33 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.artlovers.data.model.Artwork
 
 @Dao
 interface ArtworkDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addArtwork(vararg artwork: Artwork)
-
     @Query("SELECT * FROM artwork ORDER BY title ASC")
     fun listArtwork(): LiveData<List<Artwork>?>
 
     @Query("SELECT id FROM artwork")
-    fun listArtworkIds(): List<Long>?
+    suspend fun listArtworkIds(): List<Long>?
 
     @Query("SELECT * FROM artwork WHERE title LIKE :search")
     fun listArtworkForSearch(search: String): LiveData<List<Artwork>?>
 
     @Query("SELECT * FROM artwork WHERE id=:id LIMIT 1")
     fun getArtworkById(id: Long): LiveData<Artwork?>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addArtwork(artwork: Artwork)
+
+    @Transaction
+    suspend fun insertList(list: List<Artwork>) {
+        for (artwork in list) {
+            addArtwork(artwork)
+        }
+    }
 
     @Delete
-    fun delete(artwork: Artwork)
+    suspend fun delete(artwork: Artwork)
 }

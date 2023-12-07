@@ -24,8 +24,11 @@ class ArtworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateIsLoved(artwork: Artwork) {
-        localDataSource.insertArtwork(artwork)
-        if (artwork.isLoved == false) { localDataSource.deleteArtwork(artwork) }
+        if (artwork.isLoved == false) {
+            localDataSource.deleteArtwork(artwork)
+        } else {
+            localDataSource.insertArtwork(artwork)
+        }
     }
 
     override suspend fun getSearchResultsLocal(search: String): LiveData<List<Artwork>?> {

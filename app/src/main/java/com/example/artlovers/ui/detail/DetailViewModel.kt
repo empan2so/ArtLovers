@@ -9,7 +9,6 @@ import com.example.artlovers.data.model.Artwork
 import com.example.artlovers.data.repository.ArtworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
