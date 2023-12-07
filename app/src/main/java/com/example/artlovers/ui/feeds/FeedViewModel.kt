@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.artlovers.data.model.Artwork
 import com.example.artlovers.data.repository.ArtworkRepository
@@ -26,7 +25,6 @@ class FeedViewModel @Inject constructor(
     val homeArtworks: LiveData<List<Artwork>?>
         get() = _homeArtworks
 
-    private val _lovedArtworks = MutableLiveData<List<Artwork>?>()
     val lovedArtworks: LiveData<List<Artwork>?>
         get() = repository.lovedArtwork
 
@@ -35,32 +33,16 @@ class FeedViewModel @Inject constructor(
     init {
         _homeArtworks.postValue(emptyList())
         if (isFirstLoad) {
-            loadFromNetwork()
+            loadHomeArtwork()
             isFirstLoad = false
         }
     }
 
-    private fun updateHomeModel(artworks: List<Artwork>) {
-        Log.i("FeedViewModel", "Updating home feed model ${artworks.size}")
-        _homeArtworks.postValue(artworks)
-    }
-
-    fun loadFromNetwork() {
+    fun loadHomeArtwork(search: String? = null) {
         viewModelScope.launch(ioDispatcher) {
-            repository.getListArtworkRemote(1, 50).collect {
-                updateHomeModel(it)
-            }
-        }
-    }
-
-    fun loadSearchResults(search: String) {
-        viewModelScope.launch(ioDispatcher) {
-            if (search.isNotBlank()) {
-                repository.getSearchResultsRemote(search).collect {
-                    updateHomeModel(it)
-                }
-            } else {
-                loadFromNetwork()
+            repository.getHomeArtwork(search).collect {
+                Log.i("FeedViewModel", "Updating home feed model ${it.size}")
+                _homeArtworks.postValue(it)
             }
         }
     }

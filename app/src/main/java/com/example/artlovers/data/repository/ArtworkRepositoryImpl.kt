@@ -19,48 +19,45 @@ class ArtworkRepositoryImpl @Inject constructor(
     override val lovedArtwork: LiveData<List<Artwork>?> =
         localDataSource.lovedArtwork
 
-    override suspend fun getArtworkFromDB(id: Long): LiveData<Artwork?> {
-        return localDataSource.getArtwork(id)
-    }
-
     override suspend fun updateIsLoved(artwork: Artwork) {
+        Log.i("ArtworkRepositoryImpl", "updating isLoved : $artwork")
+        // artwork was not loved before but is now (current value is before update)
         if (artwork.isLoved == false) {
-            localDataSource.deleteArtwork(artwork)
+            localDataSource.insertArtwork(artwork.copy(isLoved = true))
         } else {
-            localDataSource.insertArtwork(artwork)
+            localDataSource.deleteArtwork(artwork)
         }
     }
 
-    override suspend fun getSearchResultsLocal(search: String): LiveData<List<Artwork>?> {
-        return localDataSource.listSearchResults(search)
+    override suspend fun refreshArtworkDetail(id: Long, isLoved: Boolean?): Flow<Artwork?> {
+        Log.i("ArtworkRepositoryImpl", "refreshing detail info : $id")
+        return remoteDataSource.getArtworkDetail(id.toString()).map { artwork ->
+            artwork?.isLoved = isLoved
+            artwork
+        }
     }
 
-    override suspend fun getArtworkFromRemote(id: String): Flow<Artwork?> {
-        return remoteDataSource.getArtworkDetail(id)
-    }
-
-    override suspend fun getListArtworkRemote(page: Int, limit: Int): Flow<List<Artwork>> {
-        Log.i("ArtworkRepositoryImpl", "getting home list")
+    override suspend fun getHomeArtwork(search: String?): Flow<List<Artwork>> {
+        Log.i("ArtworkRepositoryImpl", "getting home list : $search")
         val loved = localDataSource.getLovedIds()
-        return remoteDataSource.listArtwork(page, limit).map { list ->
-            list.map { artwork ->
-                if (loved?.contains(artwork.id) == true) {
-                    artwork.isLoved = true
+
+        return if (search.isNullOrEmpty()) {
+            remoteDataSource.listArtwork(1, 50).map { list ->
+                list.map { artwork ->
+                    if (loved?.contains(artwork.id) == true) {
+                        artwork.isLoved = true
+                    }
+                    artwork
                 }
-                artwork
             }
-        }
-    }
-
-    override suspend fun getSearchResultsRemote(search: String): Flow<List<Artwork>> {
-        Log.i("ArtworkRepositoryImpl", "getting search list")
-        val loved = localDataSource.getLovedIds()
-        return remoteDataSource.listSearchArtwork(search).map { list ->
-            list.map { artwork ->
-                if (loved?.contains(artwork.id) == true) {
-                    artwork.isLoved = true
+        } else {
+            remoteDataSource.listSearchArtwork(search).map { list ->
+                list.map { artwork ->
+                    if (loved?.contains(artwork.id) == true) {
+                        artwork.isLoved = true
+                    }
+                    artwork
                 }
-                artwork
             }
         }
     }

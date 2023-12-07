@@ -57,7 +57,7 @@ class DetailFragment : Fragment() {
                 artwork?.let {
                     // Fetch detail info from remote if args was null (search results)
                     if (it.artistDisplay == null) {
-                        viewModel.updateDetailFromNetwork(it.id, it.isLoved == true)
+                        viewModel.refreshArtworkDetail()
                     }
                     loadArtworkDetail(view, it)
                 }
@@ -80,7 +80,7 @@ class DetailFragment : Fragment() {
         artwork.imageId?.let { loadArtwork(artView, it) }
 
         isLovedView.setOnClickListener {
-            updateIsLoved()
+            viewModel.updateIsLoved()
         }
     }
 
@@ -102,10 +102,6 @@ class DetailFragment : Fragment() {
         } catch (exception: Exception) {
             Log.w("DetailFragment", "Exception at loadArtwork($artworkId): $exception")
         }
-    }
-
-    private fun updateIsLoved() {
-        viewModel.updateIsLoved()
     }
 
     companion object {

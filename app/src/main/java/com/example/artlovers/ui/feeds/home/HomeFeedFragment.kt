@@ -68,7 +68,7 @@ class HomeFeedFragment : FeedFragment() {
                 timer.schedule(
                     object : TimerTask() {
                         override fun run() {
-                            s?.let { viewModel.loadSearchResults(s.toString()) }
+                            s?.let { viewModel.loadHomeArtwork(s.toString()) }
                         }
                     },
                     DELAY
@@ -80,12 +80,7 @@ class HomeFeedFragment : FeedFragment() {
     // TODO - instead of making network calls each time, update the view model
     // Reloads the home feed whenever an artwork isLoved is changed
     private fun reloadFeed() {
-        val search = searchTextView.text.toString()
-        if (search.isNotBlank()) {
-            viewModel.loadSearchResults(search)
-        } else {
-            viewModel.loadFromNetwork()
-        }
+        viewModel.loadHomeArtwork(searchTextView.text.toString())
     }
 
     companion object {

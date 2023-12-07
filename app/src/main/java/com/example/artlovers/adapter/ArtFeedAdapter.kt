@@ -43,9 +43,7 @@ class ArtFeedAdapter(
         }
 
         lovedButton.setOnClickListener {
-            artwork.isLoved = !artwork.isLoved!!
             lovePressedCallback(artwork)
-            setLoveImageView(artwork.isLoved, lovedButton)
         }
 
         holder.itemView.setOnClickListener {

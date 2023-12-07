@@ -9,15 +9,12 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ArtworkRepository {
 
-    // Local
     val lovedArtwork: LiveData<List<Artwork>?>
-    suspend fun getArtworkFromDB(id: Long): LiveData<Artwork?>
-    suspend fun updateIsLoved(artwork: Artwork)
-    suspend fun getSearchResultsLocal(search: String): LiveData<List<Artwork>?>
 
-    // Remote
-    suspend fun getArtworkFromRemote(id: String): Flow<Artwork?>
-    suspend fun getListArtworkRemote(page: Int, limit: Int): Flow<List<Artwork>>
-    suspend fun getSearchResultsRemote(search: String): Flow<List<Artwork>>
+    suspend fun updateIsLoved(artwork: Artwork)
+
+    suspend fun refreshArtworkDetail(id: Long, isLoved: Boolean?): Flow<Artwork?>
+
+    suspend fun getHomeArtwork(search: String? = null): Flow<List<Artwork>>
 
 }

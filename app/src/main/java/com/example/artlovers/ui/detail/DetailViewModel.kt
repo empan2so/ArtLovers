@@ -30,34 +30,21 @@ class DetailViewModel @Inject constructor(
         _artwork.postValue(artwork)
     }
 
-    fun updateDetailFromNetwork(id: Long, isLoved: Boolean) {
+    fun refreshArtworkDetail() {
         viewModelScope.launch(ioDispatcher) {
-            repository.getArtworkFromRemote(id.toString()).collect {
-                val artwork = it?.copy(isLoved = isLoved)
-                updateModel(artwork)
-                if (artwork?.isLoved == true) {
-                    repository.updateIsLoved(artwork)
+            artwork.value?.let {
+                repository.refreshArtworkDetail(id = it.id, isLoved = it.isLoved).collect { result ->
+                    updateModel(result)
                 }
             }
         }
     }
 
-    //TODO get artwork from db if exists before making network request
-//    fun updateDetailFromDB(id: Long) {
-//        viewModelScope.launch {
-//            _artwork.postValue()
-//            repository.getArtworkFromDB(id).let {
-//                updateModel(it.value)
-//            }
-//        }
-//    }
-
     fun updateIsLoved() {
         viewModelScope.launch(ioDispatcher) {
             artwork.value?.let {
-                val updated = it.copy(isLoved = it.isLoved?.not())
-                repository.updateIsLoved(updated)
-                updateModel(updated)
+                repository.updateIsLoved(it)
+                updateModel(it.copy(isLoved = it.isLoved?.not()))
             }
         }
     }
